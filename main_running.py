@@ -11,6 +11,7 @@ print(names[0])
 #getCandleData(currency="BTC",times="24h",pyament="KRW")
 candle_datas = getCandleData(names[0]["symbol"],times="24h",pyament="KRW")
 print(candle_datas.keys())
+
 if candle_datas["status"]=="0000":
     #3. 훈련 데이터 생성
     # [기준 시간     ,  시작가  ,  종료가  ,  최고가 ,  최저가 ,   거래량]
