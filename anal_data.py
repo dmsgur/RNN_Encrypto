@@ -21,7 +21,7 @@ def getInitName():#화폐이름 얻어오기
     encrypto_names =[]
     for data in res_dict:
         if "KRW-" not in data["market"]:
-            print(data["market"])#BTC-ETH  BTC 마켓
+            #print(data["market"])#BTC-ETH  BTC 마켓
             continue
         encrypto_names.append({"symbol":data["market"].split("-")[1],
                                "eng":data["english_name"],
@@ -56,7 +56,6 @@ def generateData(source_data,timeslot):#시계열 훈련 데이터 생성
         slot_data =[]
         for cur_ix in range(ix,timeslot+ix):
             slot_data.append(source_data[cur_ix])
-            if ix==0 or ix==1:print(source_data[cur_ix])
         x_data.append(slot_data)
         y_data.append(source_data[timeslot+ix])
     return np.array(x_data),np.array(y_data)
