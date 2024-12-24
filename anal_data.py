@@ -79,6 +79,7 @@ def scatterAnal(x_data,y_data):#산점도 분석
     plt.scatter(cvdata,y_data)
     plt.show()
 
+
 if __name__=="__main__":
     pass
 
