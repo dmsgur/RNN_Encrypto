@@ -58,7 +58,7 @@ def generateData(source_data,timeslot):#시계열 훈련 데이터 생성
             slot_data.append(source_data[cur_ix])
         x_data.append(slot_data)
         y_data.append(source_data[timeslot+ix])
-    return np.array(x_data),np.array(y_data)
+    return np.array(x_data).astype("float"),np.array(y_data).astype("float")
 
 def confirm_data(x_data,y_data,source_data):# 문제 데이터와 정답 데이터 일치성 확인
     result_bool=True
@@ -66,16 +66,17 @@ def confirm_data(x_data,y_data,source_data):# 문제 데이터와 정답 데이�
         result_bool=False
     if y_data[1]!=x_data[2][-1]:
         result_bool=False
-    if y_data[-1] != source_data[-1]:#마지막 데이터 확인
+    if y_data[-1] != source_data[-1].astype("float"):#마지막 데이터 확인
         result_bool=False
-    if y_data[-2] != source_data[-2]:
+    if y_data[-2] != source_data[-2].astype("float"):
         result_bool=False
     return result_bool # True 일때 일치
 
-def scatterAnal(x_data,y_data):#산점도 분석
+def scatterAnal(x_data,y_data,weights,title):#산점도 분석
     #가중평균 적용
-    cvdata = np.average(x_data,axis=1,weights=(0.02,0.05,0.05,0.08,0.08,0.1,0.13,0.15,0.16,0.18))
+    cvdata = np.average(x_data,axis=1,weights=weights)
     plt.scatter(cvdata,y_data)
+    plt.title(title)
     plt.show()
 
 
