@@ -32,7 +32,7 @@ def getInitName():#화폐이름 얻어오기
 #order_currency 화폐명 BTC
 #payment_currency 지불화폐 KRW | BTC
 #chart_intervals 데이터간격 차트 간격, 기본값 : 24h {1m, 3m, 5m, 10m, 15m, 30m, 1h, 4h, 6h, 12h, 24h, 1w, 1mm 사용 가능}
-def getCandleData(currency="BTC",times="24h",pyament="KRW"):#캔들데이터 얻기
+def getCandleData(currency="BTC",times="24h",payment="KRW"):#캔들데이터 얻기
     order_currency = "BTC"
     payment_currency = "KRW"
     chart_intervals = "12h"
