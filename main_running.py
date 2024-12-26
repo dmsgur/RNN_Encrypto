@@ -1,4 +1,5 @@
 import  numpy as np
+import tensorflow as tf
 import matplotlib.pyplot as plt
 from datetime import datetime
 import pickle
@@ -91,8 +92,12 @@ def train_running(coinname,hanname,timesArr,payment):
         print("dim:",x_data.ndim)
         print(x_data[0][:1])
         print(y_data[:1])
-        #LSTM 모델 생성
-        rmodel = constructureModel(timeslot)
+        rmodel=None
+        if not os.path.exists(r"models\{}_{}_rnnmodel.keras".format(coinname,times)):
+            #LSTM 모델 생성
+            rmodel = constructureModel(timeslot)
+        else:
+            rmodel = tf.keras.models.load_model(r"models\{}_{}_rnnmodel.keras".format(coinname,times))
         print(x_data.shape)
         print(y_data.shape)
         fit_his = rmodel.fit(x_data,y_data,validation_data=(x_data,y_data),epochs=count_epoch,batch_size=len(x_data)//10)
@@ -103,18 +108,28 @@ def train_running(coinname,hanname,timesArr,payment):
         rnn_graph(fit_his)
         loss,acc = evaluationModel(rmodel,x_data,y_data)
         print("손실도 : ", loss, " 정확도 :",acc)
-        today_x = np.array([x_data[-1]])
-        today_y = np.array([y_data[-1]])
-        pred_y = today_predict(rmodel,today_x)
-        today_y = convertValue(scaler,today_y)
+        rarr = np.random.randint(0,len(x_data)-2,9)
+        test_x = []
+        test_y = []
+        rarr = np.append(rarr,[len(x_data)-1],axis=0)
+        for i in rarr:
+            test_x.append(x_data[i])
+            test_y.append(y_data[i])
+        test_x = np.array(test_x)
+        test_y = np.array(test_y)
+        pred_y = today_predict(rmodel,test_x)
+        true_value = convertValue(scaler,test_y)
         pred_value = convertValue(scaler,pred_y)
-        print("실제값:",round(today_y[0][0],4)," 예측값:",round(pred_value[0][0],4))
+        for i in range(len(true_value)):
+            print(ix+1,". 실제값:",round(true_value[i][0],4)," 예측값:",round(pred_value[i][0],4))
+        rat = (np.abs(pred_value - true_value) / true_value).sum()/len(true_value) * 100
+        print(rat)
         print("{}({}) {} 실제값과 예측값 오차율 : {:.2f}".\
-              format(coinname,hanname,times,abs(pred_value[0][0]-today_y[0][0])/today_y[0][0]*100),"%")
+              format(coinname,hanname,times,rat,"%"))
 
 
 timeslot = 60
-count_epoch = 200
+count_epoch = 3
 weight_avg = np.linspace(0,1,timeslot)
 if len(weight_avg)!=timeslot:
     print("가중치와 타임슬롯 수량을 동일하게 맞춰주세요")
