@@ -102,7 +102,7 @@ def train_running(coinname,hanname,timesArr,payment):
         print(y_data.shape)
         fit_his = rmodel.fit(x_data,y_data,validation_data=(x_data,y_data),epochs=count_epoch,batch_size=len(x_data)//10)
         rmodel.save(r"models\{}_{}_rnnmodel.keras".format(coinname,times))
-        with open(r"models\{}_{}_fit_his".format(coinname,times)) as fp:
+        with open(r"models\{}_{}_fit_his".format(coinname,times),"wb") as fp:
             pickle.dump(fit_his, fp)
         if not os.path.exists(r"models\{}_scaler".format(coinname)):
             with open(r"models\{}_scaler".format(coinname), "wb") as fp:
@@ -132,16 +132,17 @@ def train_running(coinname,hanname,timesArr,payment):
 names=getInitName()
 nameArr = [obj["symbol"] for obj in names]
 print(",".join(nameArr))
-userInput = input("분석할 화폐 목록을 콤마로 구분하여 작성해주세요, 전체선택은 all 을 입력하세요")
+userInput = input("분석할 화폐 목록을 콤마로 구분하여 작성해주세요, 전체선택은 all 을 입력하세요\n")
 if userInput=="all":
     names=names
 else:
     userInput = userInput.split(",")
     names=[{"symbol":obj["symbol"],"eng":obj["eng"],"kor":obj["kor"]}\
            for obj in names if obj["symbol"] in userInput]
+count_epoch = input("훈련 횟수를 숫자로 지정하세요\n")
 timeslot = 60
-count_epoch = 3
-weight_avg = np.linspace(0,1,timeslot)
+count_epoch = int(count_epoch)
+weight_avg = np.linspace(0,1,timeslot)#평균가중치 부분
 if len(weight_avg)!=timeslot:
     print("가중치와 타임슬롯 수량을 동일하게 맞춰주세요")
 
