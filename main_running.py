@@ -21,7 +21,6 @@ def train_running(coinname,hanname,timesArr,payment):
             #3. 훈련 데이터 생성
             # [기준 시간     ,  시작가  ,  종료가  ,  최고가 ,  최저가 ,   거래량]
             source_datas = np.array(candle_datas["data"])
-            print()
             x_data_start,y_data_start = generateData(source_datas[:,1],timeslot)#(source_data,timeslot)
             print(x_data_start.shape,y_data_start.shape)
             #4. 데이터 일치성확인
@@ -61,7 +60,6 @@ def train_running(coinname,hanname,timesArr,payment):
             #분석결과 5 인덱스의 quantity 부분은 선형선과 관련부족으로 제외
 
         else:print("데이터 수신 실패")
-
         #최종 데이터 생성
         print(x_data_start.shape)
         print(type(x_data_start))
@@ -75,7 +73,6 @@ def train_running(coinname,hanname,timesArr,payment):
             x_dataset.append(x_d)
         y_dataset=[]
         for ix in range(len(y_data_start)):
-
             y_dataset.append(
                 sum([y_data_start[ix], y_data_end[ix], \
                     y_data_high[ix], y_data_low[ix]]) / 4)
@@ -89,6 +86,7 @@ def train_running(coinname,hanname,timesArr,payment):
         #LSTM 입력차원 dim 3
         x_data = scaler.fit_transform(x_data).reshape((len(x_data),timeslot,-1))
         y_data = scaler.fit_transform(y_data)
+        print(scaler.scale_)
         print("dim:",x_data.ndim)
         print(x_data[0][:1])
         print(y_data[:1])
@@ -104,7 +102,7 @@ def train_running(coinname,hanname,timesArr,payment):
         rmodel.save(r"models\{}_{}_rnnmodel.keras".format(coinname,times))
         with open(r"models\{}_{}_fit_his".format(coinname,times),"wb") as fp:
             pickle.dump(fit_his, fp)
-        if not os.path.exists(r"models\{}_scaler".format(coinname)):
+        if times=="24h":
             with open(r"models\{}_scaler".format(coinname), "wb") as fp:
                 pickle.dump(scaler, fp)
         loss,acc = evaluationModel(rmodel,x_data,y_data)

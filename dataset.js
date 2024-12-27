@@ -3,8 +3,8 @@ data_sets = []
 
 //메뉴 생성기 종료 E==============================
 //데이터 아키텍처{sub_title:"",sub_content:"",sub_img:[],user_fill:""}
-data_sets.push({sub_title:"이미지 크롤링",
-  sub_content:"구글 사이트 및 네이버 사이트를 이동하면서 해당 검색어의 이미지를 자동 수집",
+data_sets.push({sub_title:"가상화폐 사이트 API 파악",
+  sub_content:"훈련에 필요한 정보 추출 주소와 요청 및 응답값 확인",
   sub_img:["1S0rv5tVKoKnAqKRLrW7huVwCqFct3AnY","1pTmtTsFhCBLjsOIIDIBtx2MonQiwPc6h",
     "1xjyNyS2sxtbov76bDhKaPzvucu-pGf58","1XXsGddarlNGJVYKwNl7c52eB_aup__9T",
     "16RHb3Jd-u_n_0gitYRJ5kMfrPK2ftFQf"
