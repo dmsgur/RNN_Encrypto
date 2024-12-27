@@ -1,15 +1,15 @@
 import matplotlib.pyplot as plt
-def rnn_graph(fit_his):
-    plt.subplot(1,2,1)
-    plt.plot(fit_his.history["acc"],label="train acc")
-    plt.plot(fit_his.history["val_acc"],label="valid acc")
-    plt.legend()
-    plt.title("ACCURACY")
-    plt.subplot(1,2,2)
-    plt.plot(fit_his.history["loss"],label="train loss")
-    plt.plot(fit_his.history["val_loss"],label="valid loss")
-    plt.legend()
-    plt.title("MAE LOSS")
+import pickle
+def rnn_graph(userInput,timeArr):
+    for ix,cname in enumerate(userInput):
+        for iix,ctime in enumerate(timeArr):
+            plt.subplot(len(userInput),len(timeArr),ix+iix+1)
+            with open(r"models\{}_{}_fit_his".format(cname,ctime)) as fp:
+                fit_his = pickle.load(fp)
+                plt.plot(fit_his.history["loss"],label="train loss")
+                plt.plot(fit_his.history["val_loss"],label="valid loss")
+                plt.legend()
+                plt.title(f"{cname}_{ctime}MAE LOSS")
     plt.show()
 def convertValue(scaler,val):
     return scaler.inverse_transform(val)
